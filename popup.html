@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Export Personnages Dofus</title>
+  <style>
+    body { font-family: sans-serif; padding: 10px; width: 400px; }
+    .button {
+        display: none;
+        width: 100%;
+        padding: 10px;
+        font-weight: bold;
+        background-color: #add036;
+        transition: background-color .3s ease;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .button:hover {
+        background-color: #8dac27;
+    }
+    a {
+        color: #add036;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #message {
+        font-size: 14px;
+        color: red;
+        line-height: 1.4em;
+    }
+    #message a {
+        color: red;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <img src="https://assets.halles-des-douze.fr/images/dark-logo.png" width="125" alt="Halles des Douze">
+        <a style="display: block;width: fit-content;margin-left: auto;" class="button" href="a-propos.html" target="_blank">À propos de cette extention</a>
+    </header>
+    <h2>Exporter mes personnages Dofus pour Halles des Douze</h2>
+    <p>En vous rendant sur la <a href="https://store.ankama.com/fr/729-dofus">boutique Dofus</a>, dans la catégorie <q>Services</q> puis <q>Transfert de personnage vers un serveur</q>, vous pourrez récupérer l'ensemble de vos personnages simplement grâce à cette petite extention.</p>
+    <p>Il suffit de cliquer sur le bouton <q>Inscrire mes personnages</q>, vous serez rediriger vers Halles des Douze pour valider l'enregistrement de vos personnages.</p>
+    <div id="message">Chargement...</div>
+    <button class="button" id="submitBtn">🚀 Inscrire mes personnages</button>
+    <script src="popup.js"></script>
+</body>
+</html>

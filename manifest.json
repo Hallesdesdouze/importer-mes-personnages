@@ -1,0 +1,11 @@
+{
+    "manifest_version": 3,
+    "name": "Importer mes personnages",
+    "version": "1.0",
+    "description": "Permet d'inscrire ses personnages Dofus sur Halles des Douze depuis la boutique officielle.",
+    "permissions": ["activeTab", "scripting"],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
+    }
+}
