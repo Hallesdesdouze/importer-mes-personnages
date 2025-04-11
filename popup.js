@@ -1,73 +1,85 @@
-let extractedJSON = "";
+let extractedData = null;
 
-chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  chrome.scripting.executeScript({
-    target: { tabId: tabs[0].id },
-    func: () => {
-        const el = document.querySelector("dofus-transfer-server");
-        const nick = document.querySelector(".nickname");
-  
-        if (!el || !el.getAttribute("data-characters")) return null;
-  
-        let characters = [];
-        try {
-            characters = JSON.parse(el.getAttribute("data-characters"));
-        } catch (e) {
-            return null;
-        }
-  
-        const simplified = characters.map(char => ({
-            server: char.server,
-            name: char.name,
-            level: char.level,
-            class: char.breed
-        }));
-  
-        return {
-            characters: simplified,
-            characterWhois: nick ? nick.textContent.trim() : ""
-        };
-    }
-  }, (results) => {
-    const result = results && results[0] ? results[0].result : null;
-    const message = document.getElementById("message");
-    const button = document.getElementById("submitBtn");
+const messageEl = document.getElementById("message");
+const submitBtn = document.getElementById("submitBtn");
 
-    if (!result || !result.characters || result.characters.length === 0) {
-        message.innerHTML = `Veuillez vous rendre sur la page de la boutique : <a href="https://store.ankama.com/fr/729-dofus/797-services/a-15144-transfert-de-personnage-vers-un-serveur" target="_blank">Transfert de personnage vers un serveur</a>`;
-        button.style.display = "none";
-        return;
-    }
+const showError = () => {
+	messageEl.innerHTML = `Veuillez vous rendre sur la page de la boutique : <a href="https://store.ankama.com/fr/729-dofus/797-services/a-15144-transfert-de-personnage-vers-un-serveur" target="_blank">Transfert de personnage vers un serveur</a>`;
+	submitBtn.style.display = "none";
+};
 
-    extractedJSON = JSON.stringify(result.characters, null, 2);
-    extractedAccName = result.characterWhois;
+async function extractCharacters() {
+	try {
+		const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+		
+		if (!tab?.url?.includes('store.ankama.com')) {
+			showError();
+			return;
+		}
 
-    message.style.display = "none";
-    button.style.display = "block";
-  });
+		const [result] = await chrome.scripting.executeScript({
+			target: { tabId: tab.id },
+			func: () => {
+				try {
+					const el = document.querySelector("dofus-transfer-server");
+					const characters = JSON.parse(el?.getAttribute("data-characters") || '[]');
+					const nickname = document.querySelector(".nickname")?.textContent.trim() || '';
+
+					return characters.map(({ server, name, level, breed }) => ({
+						server,
+						name,
+						level,
+						class: breed
+					})).filter(c => c.server && c.name) || [];
+					
+				} catch (error) {
+					return null;
+				}
+			}
+		});
+
+		return result?.result || null;
+		
+	} catch (error) {
+		console.error('Erreur d\'extraction :', error);
+		return null;
+	}
+}
+
+(async () => {
+	extractedData = await extractCharacters();
+
+	if (!extractedData?.length) {
+		showError();
+		return;
+	}
+
+	messageEl.style.display = "none";
+	submitBtn.style.display = "block";
+})();
+
+submitBtn.addEventListener("click", () => {
+	if (!extractedData) return;
+
+	const formData = new FormData();
+	formData.append('charactersJson', JSON.stringify(extractedData));
+	formData.append('characterWhois', extractedData[0]?.name || '');
+
+	const form = document.createElement('form');
+	form.method = 'POST';
+	form.action = 'https://www.halles-des-douze.fr/utilisateurs/mon-profil/importer-mes-personnages';
+	form.target = '_blank';
+	form.style.display = 'none';
+
+	for (const [name, value] of formData) {
+		const input = document.createElement('input');
+		input.type = 'hidden';
+		input.name = name;
+		input.value = value;
+		form.appendChild(input);
+	}
+
+	document.body.appendChild(form);
+	form.submit();
+	form.remove();
 });
-
-document.getElementById("submitBtn").addEventListener("click", () => {
-    if (!extractedJSON) return;
-  
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "https://www.halles-des-douze.fr/utilisateurs/mon-profil/importer-mes-personnages";
-    form.target = "_blank";
-  
-    const charactersJsonField = document.createElement("input");
-    charactersJsonField.type = "hidden";
-    charactersJsonField.name = "charactersJson";
-    charactersJsonField.value = extractedJSON;
-    form.appendChild(charactersJsonField);
-
-    const characterWhoisField = document.createElement("input");
-    characterWhoisField.type = "hidden";
-    characterWhoisField.name = "characterWhois";
-    characterWhoisField.value = extractedAccName;
-    form.appendChild(characterWhoisField);
-
-    document.body.appendChild(form);
-    form.submit();
-    form.remove();
-  });
