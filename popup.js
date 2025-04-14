@@ -1,4 +1,5 @@
 let extractedData = null;
+let extractedNickname = '';
 
 const messageEl = document.getElementById("message");
 const submitBtn = document.getElementById("submitBtn");
@@ -25,12 +26,17 @@ async function extractCharacters() {
 					const characters = JSON.parse(el?.getAttribute("data-characters") || '[]');
 					const nickname = document.querySelector(".nickname")?.textContent.trim() || '';
 
-					return characters.map(({ server, name, level, breed }) => ({
+					const filteredCharacters = characters.map(({ server, name, level, breed }) => ({
 						server,
 						name,
 						level,
 						class: breed
-					})).filter(c => c.server && c.name) || [];
+					})).filter(c => c.server && c.name);
+
+					return {
+						characters: filteredCharacters,
+						nickname
+					};
 					
 				} catch (error) {
 					return null;
@@ -47,12 +53,15 @@ async function extractCharacters() {
 }
 
 (async () => {
-	extractedData = await extractCharacters();
+	const extracted = await extractCharacters();
 
-	if (!extractedData?.length) {
+	if (!extracted || !extracted.characters?.length) {
 		showError();
 		return;
 	}
+
+	extractedData = extracted.characters;
+	extractedNickname = extracted.nickname;
 
 	messageEl.style.display = "none";
 	submitBtn.style.display = "block";
@@ -63,7 +72,7 @@ submitBtn.addEventListener("click", () => {
 
 	const formData = new FormData();
 	formData.append('charactersJson', JSON.stringify(extractedData));
-	formData.append('characterWhois', extractedData[0]?.name || '');
+	formData.append('characterWhois', extractedNickname);
 
 	const form = document.createElement('form');
 	form.method = 'POST';
