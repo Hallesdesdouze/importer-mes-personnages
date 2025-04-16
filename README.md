@@ -1,6 +1,6 @@
 # Importer mes personnages
 
-Une petite extension pour Google Chrome permettant d'inscrire automatiquement ses personnages Dofus sur son profil Halles des Douze.
+Une petite extension pour Mozilla Firefox permettant d'inscrire automatiquement ses personnages Dofus sur son profil Halles des Douze.
 
 ## Pourquoi depuis la boutique Dofus ?
 
