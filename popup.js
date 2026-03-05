@@ -5,7 +5,7 @@ const messageEl = document.getElementById("message");
 const submitBtn = document.getElementById("submitBtn");
 
 const showError = () => {
-	messageEl.innerHTML = `Veuillez vous rendre sur la page de la boutique : <a href="https://store.ankama.com/fr/729-dofus/797-services/a-15144-transfert-de-personnage-vers-un-serveur" target="_blank">Transfert de personnage vers un serveur</a>`;
+	messageEl.innerHTML = `Veuillez vous rendre sur la page de la boutique : <a href="https://store.ankama.com/fr/729-dofus/797-services/a-9987-transfert-de-personnage-vers-un-compte-dofus" target="_blank">Transfert de personnage vers un compte Dofus</a>`;
 	submitBtn.style.display = "none";
 };
 
@@ -22,7 +22,7 @@ async function extractCharacters() {
 			target: { tabId: tab.id },
 			func: () => {
 				try {
-					const el = document.querySelector("dofus-transfer-server");
+					const el = document.querySelector("update-character-account");
 					const characters = JSON.parse(el?.getAttribute("data-characters") || '[]');
 					const nickname = document.querySelector(".nickname")?.textContent.trim() || '';
 
