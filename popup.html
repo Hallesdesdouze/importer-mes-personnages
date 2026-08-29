@@ -3,55 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Export Personnages Dofus</title>
-  <style>
-    body { font-family: sans-serif; padding: 10px; width: 400px; }
-    .button {
-        display: none;
-        width: 100%;
-        padding: 10px;
-        font-weight: bold;
-        background-color: #add036;
-        transition: background-color .3s ease;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    .button:hover {
-        background-color: #8dac27;
-    }
-    a {
-        color: #add036;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    #message {
-        font-size: 14px;
-        color: red;
-        line-height: 1.4em;
-    }
-    #message a {
-        color: red;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-  </style>
+  <link rel="stylesheet" href="/public/tailwind.css">
 </head>
-<body>
-    <header>
-        <img src="https://assets.halles-des-douze.fr/images/dark-logo.png" width="125" alt="Halles des Douze">
-        <a style="display: block;width: fit-content;margin-left: auto;" class="button" href="a-propos.html" target="_blank">À propos de cette extention</a>
+<body class="bg-slate-50 min-w-125 rounded overflow-hidden box-border">
+    <header class="bg-slate-800">
+        <div class="container mx-auto p-5 flex items-center justify-between">
+            <img src="/public/import.png" width="150" alt="Halles des Douze">
+            <div class="flex flex-col items-end">
+                <span class="text-slate-200 font-bold text-sm">Importer mes personnages</span>
+                <a href="a-propos.html" target="_blank" class="text-slate-300 text-xs hover:text-lime-500 transition-colors">À propos de cette extension</a>
+            </div>
+        </div>
     </header>
-    <h2>Exporter mes personnages Dofus pour Halles des Douze</h2>
-    <p>En vous rendant sur la <a href="https://store.ankama.com/fr/729-dofus">boutique Dofus</a>, dans la catégorie <q>Services</q> puis <q>Transfert de personnage vers un compte Dofus</q>, vous pourrez récupérer l'ensemble de vos personnages simplement grâce à cette petite extention.</p>
-    <p>Il suffit de cliquer sur le bouton <q>Inscrire mes personnages</q>, vous serez rediriger vers Halles des Douze pour valider l'enregistrement de vos personnages.</p>
-    <div id="message">Chargement...</div>
-    <button class="button" id="submitBtn">🚀 Inscrire mes personnages</button>
+
+    <div class="p-5 flex flex-col gap-4">
+        <div id="status" class="hidden items-start gap-3 rounded-lg border p-3 text-xs leading-relaxed">
+            <span id="statusIcon" class="shrink-0 mt-0.5"></span>
+            <div id="statusText" class="whitespace-pre-line"></div>
+        </div>
+
+        <div id="successBar" class="hidden items-center justify-between gap-3 rounded-lg border border-lime-200 bg-lime-50 p-3">
+            <div class="text-xs text-slate-700 leading-snug">
+                <p>Compte détecté : <span class="font-semibold text-slate-900" id="nicknameOut"></span></p>
+                <p>Personnages détectés : <span class="font-semibold text-slate-900" id="countOut"></span></p>
+            </div>
+            <button type="button" id="submitBtn"
+                class="cursor-pointer shrink-0 bg-lime-500 hover:bg-lime-500/80 active:scale-95 transition rounded p-3 text-white text-xs font-medium whitespace-nowrap">
+                Importer le compte
+            </button>
+        </div>
+    </div>
+
     <script src="popup.js"></script>
 </body>
 </html>
