@@ -3,7 +3,11 @@
     "name": "Importer mes personnages",
     "version": "1.4",
     "description": "Permet d'inscrire ses personnages Dofus sur Halles des Douze depuis la boutique officielle.",
-    "permissions": ["activeTab", "scripting", "storage"],
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage"
+    ],
     "host_permissions": [
         "https://store.ankama.com/*"
     ],
@@ -17,12 +21,18 @@
     },
     "background": {
         "service_worker": "background.js",
-        "scripts": ["background.js"]
+        "scripts": [
+            "background.js"
+        ]
     },
     "content_scripts": [
         {
-            "matches": ["https://store.ankama.com/*transfert-de-personnage-vers-un-compte*"],
-            "js": ["content.js"],
+            "matches": [
+                "https://store.ankama.com/*transfert-de-personnage-vers-un-compte*"
+            ],
+            "js": [
+                "content.js"
+            ],
             "run_at": "document_idle"
         }
     ],
@@ -34,7 +44,12 @@
     "browser_specific_settings": {
         "gecko": {
             "id": "importer-mes-personnages@halles-des-douze.fr",
-            "strict_min_version": "109.0"
+            "strict_min_version": "109.0",
+            "data_collection_permissions": {
+                "required": [
+                    "websiteContent"
+                ]
+            }
         }
     }
 }
