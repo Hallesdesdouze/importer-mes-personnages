@@ -20,7 +20,6 @@
         }
     },
     "background": {
-        "service_worker": "background.js",
         "scripts": [
             "background.js"
         ]
@@ -44,7 +43,7 @@
     "browser_specific_settings": {
         "gecko": {
             "id": "importer-mes-personnages@halles-des-douze.fr",
-            "strict_min_version": "109.0",
+            "strict_min_version": "142.0",
             "data_collection_permissions": {
                 "required": [
                     "websiteContent"
